@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlumniConnect - Institute Helpdesk</title>
+
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body{
+            display: flex;
+            width: 100%;
+            min-height: 100vh;
+            background: #f4f7fb;
+            color: #202b3c;
+            overflow-x: hidden;
+        }
+
+        .side-bar{
+            background-color: #142b4a;
+            width: 240px;
+            min-width: 240px;
+            max-width: 240px;
+            flex-shrink: 0;
+            min-height: 100vh;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .container1{
+            padding: 25px 20px 15px 20px;
+        }
+
+        .txt1{
+            font-size: 20px;
+            font-weight: bold;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+        }
+        
+        .container2{
+            padding: 10px 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .container2 a{
+            display: block;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 7px;
+            color: #d5e1ef;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .container2 a:hover, .container2 a.active{
+            background: #194879;
+            color: white;
+        }
+
+        .profile {
+            margin-top: auto;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            margin-left: 15px;
+            margin-right: 15px;
+        }
+
+        .profile-info h4 {
+            font-size: 14px;
+            color: white;
+        }
+
+        .profile-info p {
+            color: #aabbd0;
+            font-size: 12px;
+            margin-top: 3px;
+        }
+
+        .main{
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .nav-bar{
+            height: 68px;
+            background: white;
+            border-bottom: 1px solid #e5edf5;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            flex-shrink: 0;
+        }
+
+        .search-box{
+            width: 55%;
+            max-width: 50vw;
+        }
+
+        .search{
+            width: 100%;
+            padding: 10px 15px;
+            background-color: #f1f6fb;
+            border: 1px solid #e2eaf2;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .top-icons{
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .notification{
+            font-size: 18px;
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 50%;
+            color: #4a5d78;
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #dcecff;
+            color: #12365c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 13px;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+
+        /* Messaging Layout */
+        .chat-app {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            padding: 20px 30px;
+            gap: 20px;
+            overflow: hidden;
+        }
+
+        .chat-sidebar {
+            width: 300px;
+            background: white;
+            border: 1px solid #eaf0f6;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 3px 12px rgba(20, 50, 80, 0.04);
+            flex-shrink: 0;
+        }
+
+        .chat-sidebar-header {
+            padding: 18px 16px;
+            border-bottom: 1px solid #eef2f6;
+        }
+
+        .chat-sidebar-header h3 {
+            font-size: 15px;
+            color: #122d4a;
+            margin-bottom: 4px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            border-bottom: 1px solid #f8fafc;
+            background: #f1f6fb;
+            border-left: 3px solid #194879;
+        }
+
+        .contact-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: #142b4a;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .contact-info h4 {
+            font-size: 14px;
+            color: #1e293b;
+        }
+
+        .contact-info p {
+            font-size: 12px;
+            color: #10b981;
+            margin-top: 3px;
+        }
+
+        .help-notice {
+            padding: 16px;
+            font-size: 12px;
+            color: #64748b;
+            line-height: 1.5;
+            background: #f8fafc;
+            border-top: 1px solid #eef2f6;
+            margin-top: auto;
+        }
+
+        /* Chat Window */
+        .chat-window {
+            flex: 1;
+            min-width: 0;
+            background: white;
+            border: 1px solid #eaf0f6;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 3px 12px rgba(20, 50, 80, 0.04);
+            overflow: hidden;
+        }
+
+        .chat-header {
+            padding: 14px 20px;
+            border-bottom: 1px solid #eef2f6;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #ffffff;
+            flex-shrink: 0;
+        }
+
+        .chat-recipient {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .chat-recipient h4 {
+            font-size: 15px;
+            color: #102944;
+        }
+
+        .chat-recipient p {
+            font-size: 12px;
+            color: #10b981;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            background: #fbfcfe;
+        }
+
+        .message-bubble {
+            max-width: 65%;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 13px;
+            line-height: 1.5;
+            position: relative;
+        }
+
+        .message-bubble.incoming {
+            align-self: flex-start;
+            background: #ffffff;
+            color: #1e293b;
+            border: 1px solid #e2e8f0;
+            border-bottom-left-radius: 2px;
+        }
+
+        .message-bubble.outgoing {
+            align-self: flex-end;
+            background: #142b4a;
+            color: white;
+            border-bottom-right-radius: 2px;
+        }
+
+        .message-time {
+            font-size: 10px;
+            color: #94a3b8;
+            margin-top: 4px;
+            text-align: right;
+        }
+
+        .message-bubble.outgoing .message-time {
+            color: #cbd5e1;
+        }
+
+        .chat-input-bar {
+            padding: 14px 20px;
+            border-top: 1px solid #eef2f6;
+            display: flex;
+            gap: 12px;
+            background: white;
+            flex-shrink: 0;
+        }
+
+        .chat-input-bar input {
+            flex: 1;
+            padding: 11px 16px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .chat-input-bar input:focus {
+            border-color: #194879;
+        }
+
+        .btn-send {
+            background: #0b315b;
+            color: white;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-send:hover {
+            background: #174d82;
+        }
+
+        .channel-badge {
+            font-size: 11px;
+            color: #194879;
+            background: #eef5fc;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="side-bar">
+
+        <div>
+            <div class="container1">
+                <span class="txt1">AlumniConnect</span>
+            </div>
+
+            <div class="container2">
+                <a href="alumni_home.html">Dashboard</a>
+                <a href="alumni_events.html">Events & RSVPs</a>
+                <a href="alumni_mentorship.html">Mentees & Requests</a>
+                <a href="alumni_announcements.html">Announcements</a>
+                <a href="alumni_messages.html" class="active">Institute Helpdesk</a>
+                <a href="alumni_profile.html">My Profile</a>
+                <a href="login.html" onclick="localStorage.removeItem('currentUser')">Sign Out</a>
+            </div>
+        </div>
+
+        <div class="profile" onclick="window.location.href='alumni_profile.html'" style="cursor: pointer;">
+            <div class="avatar" id="userAvatar">RS</div>
+            <div class="profile-info">
+                <h4 id="sidebarName">Rahul Sharma</h4>
+                <p id="sidebarRole">Alumni</p>
+            </div>
+        </div>
+
+    </div>
+
+    <main class="main">
+
+        <header class="nav-bar">
+            
+            <div class="search-box">
+                <input type="search" class="search" placeholder="Search message history...">
+            </div>
+
+            <div class="top-icons">
+                <span class="notification" title="Announcements" onclick="window.location.href='alumni_announcements.html'">📢</span>
+                <span class="notification" title="Messages" onclick="window.location.href='alumni_messages.html'">💬</span>
+                <div class="avatar" id="topAvatar" onclick="window.location.href='alumni_profile.html'">RS</div>
+            </div>
+
+        </header>
+
+        <div class="chat-app">
+
+            <!-- CONTACTS (INSTITUTE ONLY) -->
+            <div class="chat-sidebar">
+                <div class="chat-sidebar-header">
+                    <h3>Institute Channels</h3>
+                    <p style="font-size: 12px; color: #64748b;">Direct line to university administration</p>
+                </div>
+
+                <div class="contact-item">
+                    <div class="contact-avatar">AO</div>
+                    <div class="contact-info">
+                        <h4>Alumni Relations Office</h4>
+                        <p>● Active Support Desk</p>
+                    </div>
+                </div>
+
+                <div class="help-notice">
+                    🔒 <strong>Secure Communication:</strong> To maintain data privacy, direct messaging from alumni is routed strictly through the Alumni Relations Office.
+                </div>
+            </div>
+
+            <!-- CHAT CONVERSATION WINDOW -->
+            <div class="chat-window">
+                <div class="chat-header">
+                    <div class="chat-recipient">
+                        <div class="contact-avatar">AO</div>
+                        <div>
+                            <h4>Alumni Relations Office</h4>
+                            <p>● Institutional Coordinator · Online</p>
+                        </div>
+                    </div>
+                    <span class="channel-badge">Verified Institutional Channel</span>
+                </div>
+
+                <div class="chat-messages" id="messagesContainer">
+                    <!-- Populated by JS -->
+                </div>
+
+                <form class="chat-input-bar" onsubmit="sendMessage(event)">
+                    <input type="text" id="messageInput" placeholder="Write to the Alumni Relations Office..." autocomplete="off" required>
+                    <button type="submit" class="btn-send">Send</button>
+                </form>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script src="shared.js"></script>
+    <script>
+        let currentThread = null;
+
+        function initAlumniChat() {
+            const user = getCurrentUser();
+            const userRegId = user.regId || "ALU202200";
+            let allMessages = JSON.parse(localStorage.getItem("alumni_messages")) || [];
+
+            currentThread = allMessages.find(c => c.contactId === userRegId);
+            if (!currentThread) {
+                currentThread = {
+                    contactId: userRegId,
+                    name: "Alumni Relations Office",
+                    role: "University Administration",
+                    avatar: "AO",
+                    history: [
+                        { sender: "them", text: `Hello ${user.name.split(" ")[0]}! Welcome to the Alumni Portal. How can the Alumni Relations Office assist you today?`, time: "10:00 AM" }
+                    ]
+                };
+                allMessages.push(currentThread);
+                localStorage.setItem("alumni_messages", JSON.stringify(allMessages));
+            }
+
+            renderMessages();
+        }
+
+        function renderMessages() {
+            if (!currentThread) return;
+            const msgContainer = document.getElementById("messagesContainer");
+            msgContainer.innerHTML = (currentThread.history || []).map(msg => `
+                <div class="message-bubble ${msg.sender === 'me' ? 'outgoing' : 'incoming'}">
+                    <div>${msg.text}</div>
+                    <div class="message-time">${msg.time}</div>
+                </div>
+            `).join("");
+
+            msgContainer.scrollTop = msgContainer.scrollHeight;
+        }
+
+        function sendMessage(e) {
+            e.preventDefault();
+            const input = document.getElementById("messageInput");
+            const text = input.value.trim();
+            if (!text) return;
+
+            const timeNow = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            currentThread.history.push({
+                sender: "me",
+                text: text,
+                time: timeNow
+            });
+
+            // Save in localStorage
+            let allMessages = JSON.parse(localStorage.getItem("alumni_messages")) || [];
+            const idx = allMessages.findIndex(m => m.contactId === currentThread.contactId);
+            if (idx !== -1) {
+                allMessages[idx] = currentThread;
+            } else {
+                allMessages.push(currentThread);
+            }
+            localStorage.setItem("alumni_messages", JSON.stringify(allMessages));
+
+            input.value = "";
+            renderMessages();
+
+            // Institutional auto-reply
+            setTimeout(() => {
+                currentThread.history.push({
+                    sender: "them",
+                    text: "The Alumni Relations Office has received your query. A coordinator has logged this and will respond shortly.",
+                    time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                });
+
+                const updateIdx = allMessages.findIndex(m => m.contactId === currentThread.contactId);
+                if (updateIdx !== -1) {
+                    allMessages[updateIdx] = currentThread;
+                }
+                localStorage.setItem("alumni_messages", JSON.stringify(allMessages));
+                renderMessages();
+            }, 1100);
+        }
+
+        document.addEventListener("DOMContentLoaded", initAlumniChat);
+    </script>
+</body>
+</html>

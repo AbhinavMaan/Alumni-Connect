@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlumniConnect - Central Alumni Database</title>
+
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body{
+            display: flex;
+            width: 100%;
+            min-height: 100vh;
+            background: #f4f7fb;
+            color: #202b3c;
+            overflow-x: hidden;
+        }
+
+        .side-bar{
+            background-color: #0b223d;
+            width: 240px;
+            min-width: 240px;
+            max-width: 240px;
+            flex-shrink: 0;
+            min-height: 100vh;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .container1{
+            padding: 25px 20px 15px 20px;
+        }
+
+        .txt1{
+            font-size: 20px;
+            font-weight: bold;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+        }
+
+        .admin-badge-top {
+            display: inline-block;
+            font-size: 10px;
+            background: #f59e0b;
+            color: #78350f;
+            padding: 2px 7px;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-top: 4px;
+        }
+        
+        .container2{
+            padding: 10px 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .container2 a{
+            display: block;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 7px;
+            color: #d5e1ef;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .container2 a:hover, .container2 a.active{
+            background: #194879;
+            color: white;
+        }
+
+        .profile {
+            margin-top: auto;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            margin-left: 15px;
+            margin-right: 15px;
+        }
+
+        .profile-info h4 {
+            font-size: 13px;
+            color: white;
+        }
+
+        .profile-info p {
+            color: #f59e0b;
+            font-size: 11px;
+            font-weight: bold;
+            margin-top: 2px;
+        }
+
+        .main{
+            flex: 1;
+            min-width: 0;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .nav-bar{
+            height: 68px;
+            background: white;
+            border-bottom: 1px solid #e5edf5;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .search-box{
+            width: 55%;
+            max-width: 50vw;
+        }
+
+        .search{
+            width: 100%;
+            padding: 10px 15px;
+            background-color: #f1f6fb;
+            border: 1px solid #e2eaf2;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .search:focus{
+            border-color: #194879;
+            background: white;
+        }
+
+        .top-icons{
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .notification{
+            font-size: 18px;
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 50%;
+            color: #4a5d78;
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #142b4a;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 13px;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+
+        .dashboard{
+            padding: 25px 30px;
+        }
+
+        .heading-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .heading1 {
+            color: #102944;
+            font-size: 24px;
+        }
+
+        .sub-heading {
+            color: #71839a;
+            font-size: 14px;
+            margin-bottom: 22px;
+        }
+
+        .btn-add-alumni {
+            background: #0b315b;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-add-alumni:hover {
+            background: #174d82;
+        }
+
+        /* Filter Panel */
+        .filter-panel {
+            background: white;
+            border: 1px solid #eaf0f6;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 3px 12px rgba(20, 50, 80, 0.04);
+        }
+
+        .filter-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr auto;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .filter-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: bold;
+            color: #475569;
+            margin-bottom: 5px;
+        }
+
+        .filter-group input, 
+        .filter-group select {
+            width: 100%;
+            padding: 9px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #1e293b;
+            background: #f8fafc;
+            outline: none;
+        }
+
+        .btn-reset {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            padding: 9px 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+            margin-top: 18px;
+            font-weight: 600;
+            color: #475569;
+            transition: 0.2s;
+        }
+
+        .results-summary {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        /* Alumni Cards Grid */
+        .alumni-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .alumni-card {
+            background: white;
+            border: 1px solid #eaf0f6;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 3px 12px rgba(20, 50, 80, 0.04);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .alumni-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 18px rgba(20, 50, 80, 0.08);
+        }
+
+        .alumni-top {
+            display: flex;
+            gap: 14px;
+            margin-bottom: 12px;
+        }
+
+        .alumni-avatar-big {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: #142b4a;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .alumni-head h3 {
+            font-size: 16px;
+            color: #102944;
+            margin-bottom: 3px;
+        }
+
+        .alumni-role {
+            font-size: 13px;
+            font-weight: 600;
+            color: #194879;
+        }
+
+        .alumni-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+
+        .badge-batch {
+            background: #eef5fc;
+            color: #194879;
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .badge-reg {
+            background: #fef3c7;
+            color: #92400e;
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .alumni-info-list {
+            font-size: 13px;
+            color: #556987;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-bottom: 12px;
+        }
+
+        .alumni-actions {
+            display: flex;
+            gap: 8px;
+            border-top: 1px solid #f1f5f9;
+            padding-top: 14px;
+        }
+
+        .btn-view {
+            flex: 1;
+            background: #f1f6fb;
+            color: #142b4a;
+            border: 1px solid #cbd5e1;
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-connect {
+            flex: 1;
+            background: #0b315b;
+            color: white;
+            border: none;
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-connect:hover {
+            background: #174d82;
+        }
+
+        /* Modal styling */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 25, 45, 0.6);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal-card {
+            background: white;
+            width: 100%;
+            max-width: 520px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .modal-header {
+            background: #0b223d;
+            color: white;
+            padding: 18px 22px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-body {
+            padding: 22px;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .detail-row {
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+        .detail-row strong {
+            display: inline-block;
+            width: 130px;
+            color: #475569;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            color: #334155;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 12px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .modal-footer {
+            padding: 15px 22px;
+            border-top: 1px solid #eef2f6;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .btn-cancel {
+            background: #e2e8f0;
+            border: none;
+            padding: 9px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="side-bar">
+
+        <div>
+            <div class="container1">
+                <span class="txt1">AlumniConnect</span>
+                <div><span class="admin-badge-top">INSTITUTE ADMIN</span></div>
+            </div>
+
+            <div class="container2">
+                <a href="institute_home.html">Admin Overview</a>
+                <a href="institute_directory.html" class="active">Alumni Database</a>
+                <a href="institute_events.html">Manage Events</a>
+                <a href="institute_mentorship.html">Mentorship Oversight</a>
+                <a href="institute_announcements.html">Publish Notices</a>
+                <a href="institute_messages.html">Alumni Chat Hub</a>
+                <a href="institute_profile.html">Office Profile</a>
+                <a href="login.html" onclick="localStorage.removeItem('currentUser')">Sign Out</a>
+            </div>
+        </div>
+
+        <div class="profile" onclick="window.location.href='institute_profile.html'" style="cursor: pointer;">
+            <div class="avatar" id="userAvatar">AO</div>
+            <div class="profile-info">
+                <h4 id="sidebarName">Alumni Relations Office</h4>
+                <p id="sidebarRole">Institute Admin</p>
+            </div>
+        </div>
+
+    </div>
+
+    <main class="main">
+
+        <header class="nav-bar">
+            
+            <div class="search-box">
+                <input type="search" class="search" placeholder="Search database by Reg ID, Name, Company...">
+            </div>
+
+            <div class="top-icons">
+                <span class="notification" title="Publish Notices" onclick="window.location.href='institute_announcements.html'">📢</span>
+                <span class="notification" title="Messages" onclick="window.location.href='institute_messages.html'">💬</span>
+                <div class="avatar" id="topAvatar" onclick="window.location.href='institute_profile.html'">AO</div>
+            </div>
+
+        </header>
+
+        <section class="dashboard">
+
+            <div class="heading-row">
+                <h2 class="heading1">Centralized Alumni Database</h2>
+                <button class="btn-add-alumni" onclick="openAddModal()">+ Register New Alumnus</button>
+            </div>
+            <p class="sub-heading">Complete repository of verified graduates, academic history, current employment, and contact credentials.</p>
+
+            <!-- FILTER PANEL -->
+            <div class="filter-panel">
+                <div class="filter-row">
+                    <div class="filter-group">
+                        <label>Search Keyword / Reg ID</label>
+                        <input type="text" id="filterKeyword" placeholder="Reg ID, Name, Role..." oninput="filterAlumni()">
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Batch</label>
+                        <select id="filterBatch" onchange="filterAlumni()">
+                            <option value="">All Batches</option>
+                            <option value="2024">2024</option>
+                            <option value="2023">2023</option>
+                            <option value="2022">2022</option>
+                            <option value="2021">2021</option>
+                            <option value="2020">2020</option>
+                            <option value="2019">2019</option>
+                            <option value="2018">2018</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Branch</label>
+                        <select id="filterBranch" onchange="filterAlumni()">
+                            <option value="">All Branches</option>
+                            <option value="Computer Science">Computer Science</option>
+                            <option value="Electronics & Communication">ECE</option>
+                            <option value="Mechanical Engineering">Mechanical</option>
+                            <option value="Civil Engineering">Civil</option>
+                            <option value="Management">Management</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Location</label>
+                        <select id="filterLocation" onchange="filterAlumni()">
+                            <option value="">All Locations</option>
+                            <option value="Bangalore">Bangalore</option>
+                            <option value="Hyderabad">Hyderabad</option>
+                            <option value="Delhi NCR">Delhi NCR</option>
+                            <option value="Pune">Pune</option>
+                            <option value="Mumbai">Mumbai</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Company</label>
+                        <select id="filterCompany" onchange="filterAlumni()">
+                            <option value="">All Companies</option>
+                            <option value="Google">Google</option>
+                            <option value="Microsoft">Microsoft</option>
+                            <option value="Amazon">Amazon</option>
+                            <option value="Deloitte">Deloitte</option>
+                            <option value="Tata Motors">Tata Motors</option>
+                            <option value="Zomato">Zomato</option>
+                            <option value="Adobe">Adobe</option>
+                            <option value="L&T Construction">L&T</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <button class="btn-reset" onclick="resetFilters()">Reset</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RESULTS SUMMARY -->
+            <div class="results-summary">
+                <span id="resultsCount">Showing alumni</span>
+                <span>Institute verified credentials</span>
+            </div>
+
+            <!-- ALUMNI CARDS CONTAINER -->
+            <div class="alumni-grid" id="alumniContainer">
+                <!-- Dynamically populated by JS -->
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- ALUMNI DETAILS MODAL -->
+    <div class="modal-overlay" id="alumniModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 id="modalName">Alumni Record Details</h3>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body" id="modalDetails">
+                <!-- Populated dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- REGISTER ALUMNUS MODAL (INSTITUTE ADMIN) -->
+    <div class="modal-overlay" id="addModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>Register Alumnus to Database</h3>
+                <button class="modal-close" onclick="closeAddModal()">×</button>
+            </div>
+            <form id="addAlumniForm" onsubmit="saveNewAlumnus(event)">
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Registration ID</label>
+                            <input type="text" id="newRegId" placeholder="e.g. ALU202409" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" id="newName" placeholder="e.g. Rajesh Kumar" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Graduation Batch</label>
+                            <select id="newBatch" required>
+                                <option value="2024">2024</option>
+                                <option value="2023">2023</option>
+                                <option value="2022">2022</option>
+                                <option value="2021">2021</option>
+                                <option value="2020">2020</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Department / Branch</label>
+                            <select id="newBranch" required>
+                                <option value="Computer Science">Computer Science</option>
+                                <option value="Electronics & Communication">ECE</option>
+                                <option value="Mechanical Engineering">Mechanical</option>
+                                <option value="Civil Engineering">Civil</option>
+                                <option value="Management">Management</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Organization / Company</label>
+                            <input type="text" id="newCompany" placeholder="e.g. TCS, Infosys" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Designation</label>
+                            <input type="text" id="newRole" placeholder="e.g. SDE, Associate" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Location</label>
+                            <input type="text" id="newLocation" placeholder="e.g. Bangalore" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input type="email" id="newEmail" placeholder="e.g. name@company.com" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Login Password</label>
+                        <input type="text" id="newPassword" value="password123" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel" onclick="closeAddModal()">Cancel</button>
+                    <button type="submit" class="btn-add-alumni">Save to Database</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="shared.js"></script>
+    <script>
+        let allAlumni = [];
+
+        function initDirectory() {
+            allAlumni = JSON.parse(localStorage.getItem("alumni_list")) || [];
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const query = urlParams.get("search");
+            if (query) {
+                document.getElementById("filterKeyword").value = query;
+            }
+
+            filterAlumni();
+        }
+
+        function filterAlumni() {
+            const keyword = document.getElementById("filterKeyword").value.toLowerCase().trim();
+            const batch = document.getElementById("filterBatch").value;
+            const branch = document.getElementById("filterBranch").value;
+            const location = document.getElementById("filterLocation").value;
+            const company = document.getElementById("filterCompany").value;
+
+            const filtered = allAlumni.filter(person => {
+                const matchesKeyword = !keyword || 
+                    (person.regId && person.regId.toLowerCase().includes(keyword)) ||
+                    person.name.toLowerCase().includes(keyword) || 
+                    person.role.toLowerCase().includes(keyword) || 
+                    person.company.toLowerCase().includes(keyword);
+
+                const matchesBatch = !batch || person.batch === batch;
+                const matchesBranch = !branch || person.branch === branch;
+                const matchesLocation = !location || person.location === location;
+                const matchesCompany = !company || person.company.toLowerCase().includes(company.toLowerCase());
+
+                return matchesKeyword && matchesBatch && matchesBranch && matchesLocation && matchesCompany;
+            });
+
+            renderAlumni(filtered);
+        }
+
+        function renderAlumni(list) {
+            const container = document.getElementById("alumniContainer");
+            const countEl = document.getElementById("resultsCount");
+            countEl.textContent = `Showing ${list.length} database records`;
+
+            if (list.length === 0) {
+                container.innerHTML = `<div style="grid-column: 1/-1; padding: 40px; text-align: center; background: white; border-radius: 10px; border: 1px dashed #cbd5e1; color: #64748b;">No alumni records matched this criteria.</div>`;
+                return;
+            }
+
+            container.innerHTML = list.map(person => `
+                <div class="alumni-card">
+                    <div>
+                        <div class="alumni-top">
+                            <div class="alumni-avatar-big">${person.avatar || person.name.substring(0,2).toUpperCase()}</div>
+                            <div class="alumni-head">
+                                <h3>${person.name}</h3>
+                                <p class="alumni-role">${person.role}</p>
+                                <p style="font-size: 12px; color: #64748b;">${person.company}</p>
+                            </div>
+                        </div>
+
+                        <div class="alumni-badges">
+                            <span class="badge-reg">🆔 ${person.regId || 'PENDING'}</span>
+                            <span class="badge-batch">🎓 Batch ${person.batch}</span>
+                        </div>
+
+                        <div class="alumni-info-list">
+                            <span>📚 ${person.degree || person.branch}</span>
+                            <span>📍 ${person.location}</span>
+                            <span>📧 ${person.email}</span>
+                        </div>
+                    </div>
+
+                    <div class="alumni-actions">
+                        <button class="btn-view" onclick="viewDetails(${person.id})">Full Record</button>
+                        <button class="btn-connect" onclick="messageAlumnusDirectly('${person.name}')">Message</button>
+                    </div>
+                </div>
+            `).join("");
+        }
+
+        function viewDetails(id) {
+            const person = allAlumni.find(p => p.id === id);
+            if (!person) return;
+
+            document.getElementById("modalName").textContent = person.name;
+            document.getElementById("modalDetails").innerHTML = `
+                <div class="detail-row"><strong>Registration ID:</strong> <span style="font-weight: bold; color: #194879;">${person.regId || 'N/A'}</span></div>
+                <div class="detail-row"><strong>Full Name:</strong> ${person.name}</div>
+                <div class="detail-row"><strong>Current Job:</strong> ${person.role} at ${person.company}</div>
+                <div class="detail-row"><strong>Academics:</strong> Batch ${person.batch} (${person.degree || person.branch})</div>
+                <div class="detail-row"><strong>Location:</strong> ${person.location}</div>
+                <div class="detail-row"><strong>Email:</strong> ${person.email}</div>
+                <div class="detail-row"><strong>Phone:</strong> ${person.phone || '+91 98765 00000'}</div>
+                <div class="detail-row"><strong>Mentorship:</strong> ${person.isMentor ? 'Willing to Mentor' : 'Not Participating'}</div>
+                <div style="margin-top: 20px;">
+                    <button class="btn-connect" style="width: 100%; padding: 10px;" onclick="messageAlumnusDirectly('${person.name}')">Start Direct Chat as Institute</button>
+                </div>
+            `;
+            document.getElementById("alumniModal").classList.add("open");
+        }
+
+        function closeModal() {
+            document.getElementById("alumniModal").classList.remove("open");
+        }
+
+        function messageAlumnusDirectly(name) {
+            window.location.href = `institute_messages.html?recipient=${encodeURIComponent(name)}`;
+        }
+
+        function openAddModal() {
+            document.getElementById("addModal").classList.add("open");
+        }
+
+        function closeAddModal() {
+            document.getElementById("addModal").classList.remove("open");
+        }
+
+        function saveNewAlumnus(e) {
+            e.preventDefault();
+            const regId = document.getElementById("newRegId").value.trim().toUpperCase();
+            const name = document.getElementById("newName").value.trim();
+            const batch = document.getElementById("newBatch").value;
+            const branch = document.getElementById("newBranch").value;
+            const company = document.getElementById("newCompany").value.trim();
+            const role = document.getElementById("newRole").value.trim();
+            const location = document.getElementById("newLocation").value.trim();
+            const email = document.getElementById("newEmail").value.trim();
+            const password = document.getElementById("newPassword").value.trim();
+
+            const initials = name.split(" ").map(w => w[0]).join("").substring(0,2).toUpperCase();
+
+            const newRec = {
+                id: Date.now(),
+                regId: regId,
+                password: password,
+                name: name,
+                batch: batch,
+                branch: branch,
+                degree: `B.Tech ${branch}`,
+                company: company,
+                role: role,
+                location: location,
+                email: email,
+                phone: "+91 98000 00000",
+                skills: ["Industry Skills"],
+                bio: `Alumnus of Batch ${batch}, working at ${company}.`,
+                isMentor: true,
+                avatar: initials
+            };
+
+            allAlumni.unshift(newRec);
+            localStorage.setItem("alumni_list", JSON.stringify(allAlumni));
+
+            closeAddModal();
+            document.getElementById("addAlumniForm").reset();
+            filterAlumni();
+            alert(`Alumnus ${name} successfully registered with Registration ID: ${regId}!`);
+        }
+
+        function resetFilters() {
+            document.getElementById("filterKeyword").value = "";
+            document.getElementById("filterBatch").value = "";
+            document.getElementById("filterBranch").value = "";
+            document.getElementById("filterLocation").value = "";
+            document.getElementById("filterCompany").value = "";
+            filterAlumni();
+        }
+
+        document.addEventListener("DOMContentLoaded", initDirectory);
+    </script>
+</body>
+</html>

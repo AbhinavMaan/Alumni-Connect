@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlumniConnect - Mentees & Requests</title>
+
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body{
+            display: flex;
+            width: 100%;
+            min-height: 100vh;
+            background: #f4f7fb;
+            color: #202b3c;
+            overflow-x: hidden;
+        }
+
+        .side-bar{
+            background-color: #142b4a;
+            width: 240px;
+            min-width: 240px;
+            max-width: 240px;
+            flex-shrink: 0;
+            min-height: 100vh;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .container1{
+            padding: 25px 20px 15px 20px;
+        }
+
+        .txt1{
+            font-size: 20px;
+            font-weight: bold;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+        }
+        
+        .container2{
+            padding: 10px 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .container2 a{
+            display: block;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 7px;
+            color: #d5e1ef;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .container2 a:hover, .container2 a.active{
+            background: #194879;
+            color: white;
+        }
+
+        .profile {
+            margin-top: auto;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            margin-left: 15px;
+            margin-right: 15px;
+        }
+
+        .profile-info h4 {
+            font-size: 14px;
+            color: white;
+        }
+
+        .profile-info p {
+            color: #aabbd0;
+            font-size: 12px;
+            margin-top: 3px;
+        }
+
+        .main{
+            flex: 1;
+            min-width: 0;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .nav-bar{
+            height: 68px;
+            background: white;
+            border-bottom: 1px solid #e5edf5;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .search-box{
+            width: 55%;
+            max-width: 50vw;
+        }
+
+        .search{
+            width: 100%;
+            padding: 10px 15px;
+            background-color: #f1f6fb;
+            border: 1px solid #e2eaf2;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .search:focus{
+            border-color: #194879;
+            background: white;
+        }
+
+        .top-icons{
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .notification{
+            font-size: 18px;
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 50%;
+            color: #4a5d78;
+        }
+
+        .notification:hover{
+            background: #f1f6fb;
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #dcecff;
+            color: #12365c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 13px;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+
+        .dashboard{
+            padding: 25px 30px;
+        }
+
+        .heading1 {
+            color: #102944;
+            font-size: 24px;
+            margin-bottom: 6px;
+        }
+
+        .sub-heading {
+            color: #71839a;
+            font-size: 14px;
+            margin-bottom: 22px;
+        }
+
+        .tabs-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e5edf5;
+            margin-bottom: 22px;
+        }
+
+        .tab-btn-group {
+            display: flex;
+            gap: 25px;
+        }
+
+        .tab-btn-group button {
+            border: none;
+            background: none;
+            padding: 12px 18px;
+            font-size: 14px;
+            color: #7c8da3;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -1px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .tab-btn-group button.active {
+            color: #142b4a;
+            border-bottom-color: #194879;
+            font-weight: 700;
+        }
+
+        /* Requests Table */
+        .requests-card {
+            background: white;
+            border: 1px solid #eaf0f6;
+            border-radius: 10px;
+            box-shadow: 0 3px 12px rgba(20, 50, 80, 0.04);
+            overflow: hidden;
+        }
+
+        .requests-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            text-align: left;
+        }
+
+        .requests-table th {
+            background: #f8fafc;
+            padding: 14px 18px;
+            color: #475569;
+            font-weight: 600;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .requests-table td {
+            padding: 14px 18px;
+            border-bottom: 1px solid #f1f5f9;
+            color: #1e293b;
+            vertical-align: middle;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .status-accepted, .status-active {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #b45309;
+        }
+
+        .status-declined {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        /* Action Buttons */
+        .btn-action-accept {
+            background: #0b315b;
+            color: white;
+            border: none;
+            padding: 7px 14px;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-right: 6px;
+        }
+
+        .btn-action-accept:hover {
+            background: #174d82;
+        }
+
+        .btn-action-decline {
+            background: #f1f5f9;
+            color: #64748b;
+            border: 1px solid #cbd5e1;
+            padding: 6px 12px;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-action-decline:hover {
+            background: #e2e8f0;
+        }
+
+        /* Mentees Grid Cards */
+        .mentees-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .mentee-card {
+            background: white;
+            border: 1px solid #eaf0f6;
+            border-radius: 10px;
+            padding: 22px;
+            box-shadow: 0 3px 12px rgba(20, 50, 80, 0.04);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .mentee-head {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 14px;
+        }
+
+        .mentee-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #dcecff;
+            color: #12365c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .mentee-title h3 {
+            font-size: 16px;
+            color: #102944;
+            margin-bottom: 3px;
+        }
+
+        .mentee-title p {
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .mentee-topic {
+            background: #f8fafc;
+            border-left: 3px solid #194879;
+            padding: 10px 12px;
+            font-size: 13px;
+            color: #334155;
+            margin-bottom: 14px;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .mentee-meta {
+            font-size: 12px;
+            color: #64748b;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 16px;
+        }
+
+        .empty-placeholder {
+            padding: 40px 20px;
+            text-align: center;
+            background: white;
+            border-radius: 10px;
+            border: 1px dashed #cbd5e1;
+            color: #64748b;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="side-bar">
+
+        <div>
+            <div class="container1">
+                <span class="txt1">AlumniConnect</span>
+            </div>
+
+            <div class="container2">
+                <a href="alumni_home.html">Dashboard</a>
+                <a href="alumni_events.html">Events & RSVPs</a>
+                <a href="alumni_mentorship.html" class="active">Mentees & Requests</a>
+                <a href="alumni_announcements.html">Announcements</a>
+                <a href="alumni_messages.html">Institute Helpdesk</a>
+                <a href="alumni_profile.html">My Profile</a>
+                <a href="login.html" onclick="localStorage.removeItem('currentUser')">Sign Out</a>
+            </div>
+        </div>
+
+        <div class="profile" onclick="window.location.href='alumni_profile.html'" style="cursor: pointer;">
+            <div class="avatar" id="userAvatar">RS</div>
+            <div class="profile-info">
+                <h4 id="sidebarName">Rahul Sharma</h4>
+                <p id="sidebarRole">Alumni</p>
+            </div>
+        </div>
+
+    </div>
+
+    <main class="main">
+
+        <header class="nav-bar">
+            
+            <div class="search-box">
+                <input type="search" class="search" placeholder="Search student mentees, topics...">
+            </div>
+
+            <div class="top-icons">
+                <span class="notification" title="Announcements" onclick="window.location.href='alumni_announcements.html'">📢</span>
+                <span class="notification" title="Messages" onclick="window.location.href='alumni_messages.html'">💬</span>
+                <div class="avatar" id="topAvatar" onclick="window.location.href='alumni_profile.html'">RS</div>
+            </div>
+
+        </header>
+
+        <section class="dashboard">
+
+            <h2 class="heading1">Alumni Mentorship Management</h2>
+            <p class="sub-heading">Review incoming student mentorship applications and guide your active student mentees.</p>
+
+            <div class="tabs-header">
+                <div class="tab-btn-group">
+                    <button class="active" id="tabRequests" onclick="switchMentorshipTab('requests')">
+                        Incoming Requests (<span id="reqCountBadge">0</span>)
+                    </button>
+                    <button id="tabMentees" onclick="switchMentorshipTab('mentees')">
+                        My Mentees (<span id="menteeCountBadge">0</span>)
+                    </button>
+                </div>
+            </div>
+
+            <!-- TAB 1: INCOMING MENTORSHIP REQUESTS -->
+            <div id="requestsTabContent">
+                <div class="requests-card">
+                    <table class="requests-table">
+                        <thead>
+                            <tr>
+                                <th>Student (Applicant)</th>
+                                <th>Program / Year</th>
+                                <th>Requested Focus Topic</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th style="text-align: right;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="requestsTableBody">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB 2: ACTIVE MENTEES -->
+            <div id="menteesTabContent" style="display: none;">
+                <div class="mentees-grid" id="menteesGrid">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <script src="shared.js"></script>
+    <script>
+        let currentTab = 'requests';
+
+        function initMentorshipPage() {
+            renderRequestsTab();
+            renderMenteesTab();
+        }
+
+        function switchMentorshipTab(tab) {
+            currentTab = tab;
+            const reqContent = document.getElementById("requestsTabContent");
+            const menteesContent = document.getElementById("menteesTabContent");
+            const tabReq = document.getElementById("tabRequests");
+            const tabMentees = document.getElementById("tabMentees");
+
+            if (tab === 'requests') {
+                reqContent.style.display = "block";
+                menteesContent.style.display = "none";
+                tabReq.classList.add("active");
+                tabMentees.classList.remove("active");
+                renderRequestsTab();
+            } else {
+                reqContent.style.display = "none";
+                menteesContent.style.display = "block";
+                tabMentees.classList.add("active");
+                tabReq.classList.remove("active");
+                renderMenteesTab();
+            }
+        }
+
+        function renderRequestsTab() {
+            const user = getCurrentUser();
+            const allRequests = JSON.parse(localStorage.getItem("alumni_mentorship")) || [];
+
+            // Only show requests explicitly addressed to the logged-in alumni by their regId
+            const displayRequests = allRequests.filter(r =>
+                r.mentorRegId && r.mentorRegId.toLowerCase() === (user.regId || "").toLowerCase()
+            );
+
+            document.getElementById("reqCountBadge").textContent = displayRequests.filter(r => r.status === 'Pending').length;
+
+            const tbody = document.getElementById("requestsTableBody");
+            if (displayRequests.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="empty-placeholder">No mentorship requests addressed to you at the moment.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = displayRequests.map(req => `
+                <tr>
+                    <td>
+                        <strong>${req.studentName}</strong>
+                        <div style="font-size: 11px; color: #94a3b8;">ID: ${req.studentId || 'STU-2024'}</div>
+                    </td>
+                    <td>${req.program || 'B.Tech Student'}</td>
+                    <td>
+                        <strong>${req.topic}</strong>
+                        <div style="font-size: 12px; color: #64748b; margin-top: 3px;">"${req.note || 'Seeking career guidance.'}"</div>
+                    </td>
+                    <td>${req.date}</td>
+                    <td>
+                        <span class="status-badge ${req.status === 'Accepted' ? 'status-accepted' : (req.status === 'Declined' ? 'status-declined' : 'status-pending')}">
+                            ${req.status}
+                        </span>
+                    </td>
+                    <td style="text-align: right; white-space: nowrap;">
+                        ${req.status === 'Pending' ? `
+                            <button class="btn-action-accept" onclick="acceptRequest(${req.id})">Accept Request</button>
+                            <button class="btn-action-decline" onclick="declineRequest(${req.id})">Decline</button>
+                        ` : `
+                            <span style="font-size: 12px; color: #64748b;">${req.status === 'Accepted' ? '✓ Accepted' : 'Declined'}</span>
+                        `}
+                    </td>
+                </tr>
+            `).join("");
+        }
+
+        function renderMenteesTab() {
+            const user = getCurrentUser();
+            const allMentees = JSON.parse(localStorage.getItem("alumni_mentees")) || [];
+
+            // Only show mentees paired with the logged-in alumni by their regId
+            const displayMentees = allMentees.filter(m =>
+                m.mentorRegId && m.mentorRegId.toLowerCase() === (user.regId || "").toLowerCase()
+            );
+
+            document.getElementById("menteeCountBadge").textContent = displayMentees.length;
+
+            const grid = document.getElementById("menteesGrid");
+            if (displayMentees.length === 0) {
+                grid.innerHTML = `<div style="grid-column: 1/-1;" class="empty-placeholder"><h3>No active mentees paired currently.</h3><p style="margin-top: 6px;">Accept incoming student requests from the 'Incoming Requests' tab to add mentees.</p></div>`;
+                return;
+            }
+
+            grid.innerHTML = displayMentees.map(mentee => `
+                <div class="mentee-card">
+                    <div>
+                        <div class="mentee-head">
+                            <div class="mentee-avatar">${mentee.studentName.substring(0,2).toUpperCase()}</div>
+                            <div class="mentee-title">
+                                <h3>${mentee.studentName}</h3>
+                                <p>Student ID: ${mentee.studentId} · ${mentee.program}</p>
+                            </div>
+                        </div>
+
+                        <div class="mentee-topic">
+                            <strong>Focus Topic:</strong><br>
+                            ${mentee.topic}
+                        </div>
+
+                        <div class="mentee-meta">
+                            <span>📧 ${mentee.email || 'student@university.edu'}</span>
+                            <span>📅 Active since: ${mentee.startDate || 'Current Semester'}</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <span class="status-badge status-active">● Active Mentee</span>
+                    </div>
+                </div>
+            `).join("");
+        }
+
+        function acceptRequest(reqId) {
+            let requests = JSON.parse(localStorage.getItem("alumni_mentorship")) || [];
+            let mentees = JSON.parse(localStorage.getItem("alumni_mentees")) || [];
+            const user = getCurrentUser();
+
+            const req = requests.find(r => r.id === reqId);
+            if (req) {
+                req.status = "Accepted";
+                localStorage.setItem("alumni_mentorship", JSON.stringify(requests));
+
+                const alreadyMentee = mentees.some(m => m.studentName === req.studentName && m.topic === req.topic);
+                if (!alreadyMentee) {
+                    mentees.push({
+                        id: Date.now(),
+                        studentName: req.studentName,
+                        studentId: req.studentId || "1220" + Math.floor(1000 + Math.random() * 9000),
+                        program: req.program || "B.Tech Student",
+                        mentorName: user.name,
+                        mentorRegId: user.regId || "ALU202200",
+                        topic: req.topic,
+                        startDate: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
+                        status: "Active",
+                        email: req.studentName.toLowerCase().replace(" ", ".") + "@student.edu"
+                    });
+                    localStorage.setItem("alumni_mentees", JSON.stringify(mentees));
+                }
+
+                alert(`Accepted mentorship request for ${req.studentName}! They are now added to your 'My Mentees' tab.`);
+                renderRequestsTab();
+                renderMenteesTab();
+            }
+        }
+
+        function declineRequest(reqId) {
+            let requests = JSON.parse(localStorage.getItem("alumni_mentorship")) || [];
+            const req = requests.find(r => r.id === reqId);
+            if (req) {
+                req.status = "Declined";
+                localStorage.setItem("alumni_mentorship", JSON.stringify(requests));
+                renderRequestsTab();
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", initMentorshipPage);
+    </script>
+</body>
+</html>

@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlumniConnect - My Profile</title>
+
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body{
+            display: flex;
+            width: 100%;
+            min-height: 100vh;
+            background: #f4f7fb;
+            color: #202b3c;
+            overflow-x: hidden;
+        }
+
+        .side-bar{
+            background-color: #142b4a;
+            width: 240px;
+            min-width: 240px;
+            max-width: 240px;
+            flex-shrink: 0;
+            min-height: 100vh;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .container1{
+            padding: 25px 20px 15px 20px;
+        }
+
+        .txt1{
+            font-size: 20px;
+            font-weight: bold;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+        }
+        
+        .container2{
+            padding: 10px 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .container2 a{
+            display: block;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 7px;
+            color: #d5e1ef;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .container2 a:hover, .container2 a.active{
+            background: #194879;
+            color: white;
+        }
+
+        .profile {
+            margin-top: auto;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            margin-left: 15px;
+            margin-right: 15px;
+        }
+
+        .profile-info h4 {
+            font-size: 14px;
+            color: white;
+        }
+
+        .profile-info p {
+            color: #aabbd0;
+            font-size: 12px;
+            margin-top: 3px;
+        }
+
+        .main{
+            flex: 1;
+            min-width: 0;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .nav-bar{
+            height: 68px;
+            background: white;
+            border-bottom: 1px solid #e5edf5;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .search-box{
+            width: 55%;
+            max-width: 50vw;
+        }
+
+        .search{
+            width: 100%;
+            padding: 10px 15px;
+            background-color: #f1f6fb;
+            border: 1px solid #e2eaf2;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .search:focus{
+            border-color: #194879;
+            background: white;
+        }
+
+        .top-icons{
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .notification{
+            font-size: 18px;
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 50%;
+            color: #4a5d78;
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #dcecff;
+            color: #12365c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 13px;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+
+        .dashboard{
+            padding: 25px 30px;
+        }
+
+        .heading1 {
+            color: #102944;
+            font-size: 24px;
+            margin-bottom: 6px;
+        }
+
+        .sub-heading {
+            color: #71839a;
+            font-size: 14px;
+            margin-bottom: 22px;
+        }
+
+        /* Profile Layout */
+        .profile-layout {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 25px;
+            align-items: start;
+        }
+
+        .profile-form-card {
+            background: white;
+            border: 1px solid #eaf0f6;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 3px 12px rgba(20, 50, 80, 0.04);
+        }
+
+        .section-title {
+            font-size: 16px;
+            color: #122d4a;
+            margin-bottom: 16px;
+            border-bottom: 1px solid #f1f5f9;
+            padding-bottom: 8px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .form-group {
+            flex: 1;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #334155;
+        }
+
+        .form-group input, 
+        .form-group select, 
+        .form-group textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 13px;
+            background: #f8fafc;
+            color: #1e293b;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        .form-group input:focus, 
+        .form-group select:focus, 
+        .form-group textarea:focus {
+            border-color: #194879;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(25, 72, 121, 0.12);
+        }
+
+        .btn-save {
+            background: #0b315b;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 10px;
+        }
+
+        .btn-save:hover {
+            background: #174d82;
+        }
+
+        /* Live Preview Card */
+        .preview-card {
+            background: white;
+            border: 1px solid #eaf0f6;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 3px 12px rgba(20, 50, 80, 0.04);
+            text-align: center;
+        }
+
+        .preview-avatar {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: #142b4a;
+            color: white;
+            font-size: 26px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px auto;
+        }
+
+        .preview-name {
+            font-size: 18px;
+            color: #102944;
+            margin-bottom: 4px;
+        }
+
+        .preview-role {
+            font-size: 13px;
+            color: #194879;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .preview-company {
+            font-size: 13px;
+            color: #64748b;
+            margin-bottom: 14px;
+        }
+
+        .preview-badge {
+            display: inline-block;
+            background: #eef5fc;
+            color: #194879;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            margin-bottom: 16px;
+        }
+
+        .preview-details {
+            text-align: left;
+            border-top: 1px solid #f1f5f9;
+            padding-top: 16px;
+            font-size: 13px;
+            color: #475569;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .preview-details strong {
+            color: #1e293b;
+        }
+
+        .alert-success {
+            display: none;
+            background: #dcfce7;
+            color: #15803d;
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="side-bar">
+
+        <div>
+            <div class="container1">
+                <span class="txt1">AlumniConnect</span>
+            </div>
+
+            <div class="container2">
+                <a href="alumni_home.html">Dashboard</a>
+                <a href="alumni_events.html">Events & RSVPs</a>
+                <a href="alumni_mentorship.html">Mentees & Requests</a>
+                <a href="alumni_announcements.html">Announcements</a>
+                <a href="alumni_messages.html">Institute Helpdesk</a>
+                <a href="alumni_profile.html" class="active">My Profile</a>
+                <a href="login.html" onclick="localStorage.removeItem('currentUser')">Sign Out</a>
+            </div>
+        </div>
+
+        <div class="profile" style="cursor: pointer;">
+            <div class="avatar" id="userAvatar">RS</div>
+            <div class="profile-info">
+                <h4 id="sidebarName">Rahul Sharma</h4>
+                <p id="sidebarRole">Alumni</p>
+            </div>
+        </div>
+
+    </div>
+
+    <main class="main">
+
+        <header class="nav-bar">
+            
+            <div class="search-box">
+                <input type="search" class="search" placeholder="Search...">
+            </div>
+
+            <div class="top-icons">
+                <span class="notification" title="Announcements" onclick="window.location.href='alumni_announcements.html'">📢</span>
+                <span class="notification" title="Messages" onclick="window.location.href='alumni_messages.html'">💬</span>
+                <div class="avatar" id="topAvatar">RS</div>
+            </div>
+
+        </header>
+
+        <section class="dashboard">
+
+            <h2 class="heading1">Alumni Profile Creation & Updates</h2>
+            <p class="sub-heading">Keep your contact details, career accomplishments, and mentorship status up to date for the university network.</p>
+
+            <div class="alert-success" id="successBanner">
+                ✓ Your profile details have been saved successfully and updated across the directory!
+            </div>
+
+            <div class="profile-layout">
+                
+                <!-- EDIT PROFILE FORM -->
+                <div class="profile-form-card">
+                    <form id="profileForm" onsubmit="saveProfile(event)">
+                        
+                        <h3 class="section-title">Personal & Contact Information</h3>
+                        <div class="form-row">
+                            <div class="form-group" style="flex: 0.8;">
+                                <label>Registration ID</label>
+                                <input type="text" id="profRegId" readonly style="background: #e2e8f0; font-weight: bold; color: #194879; cursor: not-allowed;">
+                            </div>
+                            <div class="form-group" style="flex: 1.2;">
+                                <label>Full Name</label>
+                                <input type="text" id="profName" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Email Address</label>
+                                <input type="email" id="profEmail" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Contact Phone</label>
+                                <input type="text" id="profPhone" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Location (City, Country)</label>
+                                <input type="text" id="profLocation" required>
+                            </div>
+                        </div>
+
+                        <h3 class="section-title" style="margin-top: 20px;">Academic Details</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Graduation Batch (Year)</label>
+                                <select id="profBatch" required>
+                                    <option value="2025">2025</option>
+                                    <option value="2024">2024</option>
+                                    <option value="2023">2023</option>
+                                    <option value="2022">2022</option>
+                                    <option value="2021">2021</option>
+                                    <option value="2020">2020</option>
+                                    <option value="2019">2019</option>
+                                    <option value="2018">2018</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Branch / Degree</label>
+                                <select id="profBranch" required>
+                                    <option value="Computer Science">Computer Science (CSE)</option>
+                                    <option value="Electronics & Communication">Electronics & Communication (ECE)</option>
+                                    <option value="Mechanical Engineering">Mechanical Engineering</option>
+                                    <option value="Civil Engineering">Civil Engineering</option>
+                                    <option value="Management">Management (MBA)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <h3 class="section-title" style="margin-top: 20px;">Professional Career Details</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Current Organization / Company</label>
+                                <input type="text" id="profCompany" placeholder="e.g. Microsoft" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Designation / Job Title</label>
+                                <input type="text" id="profRole" placeholder="e.g. Software Engineer" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 16px;">
+                            <label>Key Skills & Core Competencies (comma separated)</label>
+                            <input type="text" id="profSkills" placeholder="e.g. Cloud Architecture, React, System Design, Python">
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 16px;">
+                            <label>Professional Bio / Summary</label>
+                            <textarea id="profBio" rows="4" placeholder="Share your experience, achievements, and career path..."></textarea>
+                        </div>
+
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px; background: #f8fafc; padding: 12px 16px; border-radius: 6px; border: 1px solid #e2e8f0;">
+                            <input type="checkbox" id="profMentor" style="width: auto; cursor: pointer;">
+                            <label for="profMentor" style="font-size: 13px; font-weight: 600; color: #1e293b; margin: 0; cursor: pointer;">
+                                Willing to act as a Mentor for students & junior alumni
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn-save">Save & Update Profile</button>
+                    </form>
+                </div>
+
+                <!-- LIVE PREVIEW CARD -->
+                <div class="preview-card">
+                    <div class="preview-avatar" id="prevAvatar">RS</div>
+                    <h3 class="preview-name" id="prevName">Rahul Sharma</h3>
+                    <p class="preview-role" id="prevRole">Software Engineer</p>
+                    <p class="preview-company" id="prevCompany">Microsoft · Bangalore</p>
+                    <span class="preview-badge" id="prevBatch">🎓 Batch of 2022</span>
+                    
+                    <div class="preview-details">
+                        <div><strong>Reg ID:</strong> <span id="prevRegId" style="font-weight: bold; color: #194879;">ALU202200</span></div>
+                        <div><strong>Degree:</strong> <span id="prevDegree">B.Tech Computer Science</span></div>
+                        <div><strong>Email:</strong> <span id="prevEmail">rahul.sharma@alumni.edu</span></div>
+                        <div><strong>Phone:</strong> <span id="prevPhone">+91 98765 00112</span></div>
+                        <div><strong>Mentorship:</strong> <span id="prevMentorStatus">Available</span></div>
+                        <div style="margin-top: 8px;">
+                            <strong>Bio:</strong>
+                            <p id="prevBio" style="margin-top: 4px; font-size: 12px; line-height: 1.5; color: #64748b;">
+                                Passionate developer, tech enthusiast, and proud alumnus.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <script src="shared.js"></script>
+    <script>
+        function loadProfileData() {
+            const user = getCurrentUser();
+
+            document.getElementById("profRegId").value = user.regId || "ALU202200";
+            document.getElementById("profName").value = user.name || "";
+            document.getElementById("profEmail").value = user.email || "";
+            document.getElementById("profPhone").value = user.phone || "";
+            document.getElementById("profLocation").value = user.location || "";
+            document.getElementById("profBatch").value = user.batch || "2022";
+            document.getElementById("profBranch").value = user.branch || "Computer Science";
+            document.getElementById("profCompany").value = user.company || "";
+            document.getElementById("profRole").value = user.designation || "";
+            document.getElementById("profSkills").value = user.skills || "";
+            document.getElementById("profBio").value = user.bio || "";
+            document.getElementById("profMentor").checked = !!user.isMentor;
+
+            updateLivePreview(user);
+        }
+
+        function updateLivePreview(user) {
+            const initials = user.avatar || (user.name ? user.name.split(" ").map(w => w[0]).join("").substring(0,2).toUpperCase() : "U");
+            document.getElementById("prevAvatar").textContent = initials;
+            document.getElementById("prevRegId").textContent = user.regId || "ALU202200";
+            document.getElementById("prevName").textContent = user.name || "User";
+            document.getElementById("prevRole").textContent = user.designation || "Designation";
+            document.getElementById("prevCompany").textContent = `${user.company || 'Organization'} · ${user.location || 'Location'}`;
+            document.getElementById("prevBatch").textContent = `🎓 Batch of ${user.batch || '2022'}`;
+            document.getElementById("prevDegree").textContent = user.degree || user.branch || 'B.Tech CSE';
+            document.getElementById("prevEmail").textContent = user.email || "";
+            document.getElementById("prevPhone").textContent = user.phone || "";
+            document.getElementById("prevMentorStatus").textContent = user.isMentor ? "Available for Mentoring" : "Not Currently Available";
+            document.getElementById("prevBio").textContent = user.bio || "No bio added yet.";
+        }
+
+        function saveProfile(e) {
+            e.preventDefault();
+
+            const name = document.getElementById("profName").value.trim();
+            const email = document.getElementById("profEmail").value.trim();
+            const phone = document.getElementById("profPhone").value.trim();
+            const location = document.getElementById("profLocation").value.trim();
+            const batch = document.getElementById("profBatch").value;
+            const branch = document.getElementById("profBranch").value;
+            const company = document.getElementById("profCompany").value.trim();
+            const role = document.getElementById("profRole").value.trim();
+            const skills = document.getElementById("profSkills").value.trim();
+            const bio = document.getElementById("profBio").value.trim();
+            const isMentor = document.getElementById("profMentor").checked;
+
+            const initials = name.split(" ").map(w => w[0]).join("").substring(0,2).toUpperCase();
+            const currentRegId = document.getElementById("profRegId").value;
+
+            const updatedUser = {
+                name: name,
+                role: "Alumni",
+                regId: currentRegId,
+                email: email,
+                phone: phone,
+                location: location,
+                batch: batch,
+                branch: branch,
+                degree: `B.Tech ${branch}`,
+                company: company,
+                designation: role,
+                skills: skills,
+                bio: bio,
+                avatar: initials,
+                isMentor: isMentor
+            };
+
+            // Save to localStorage
+            localStorage.setItem("currentUser", JSON.stringify(updatedUser));
+
+            // Also update entry in alumni_list
+            let alumniList = JSON.parse(localStorage.getItem("alumni_list")) || [];
+            const existingIdx = alumniList.findIndex(a => 
+                (a.regId && a.regId.toLowerCase() === currentRegId.toLowerCase()) || 
+                (a.email && a.email.toLowerCase() === email.toLowerCase())
+            );
+            const skillsArr = skills ? skills.split(",").map(s => s.trim()) : ["Tech"];
+
+            if (existingIdx !== -1) {
+                alumniList[existingIdx].name = name;
+                alumniList[existingIdx].batch = batch;
+                alumniList[existingIdx].branch = branch;
+                alumniList[existingIdx].company = company;
+                alumniList[existingIdx].role = role;
+                alumniList[existingIdx].location = location;
+                alumniList[existingIdx].skills = skillsArr;
+                alumniList[existingIdx].bio = bio;
+                alumniList[existingIdx].isMentor = isMentor;
+            }
+            localStorage.setItem("alumni_list", JSON.stringify(alumniList));
+
+            updateLivePreview(updatedUser);
+            updateSidebarUser();
+
+            const banner = document.getElementById("successBanner");
+            banner.style.display = "block";
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            setTimeout(() => {
+                banner.style.display = "none";
+            }, 4000);
+        }
+
+        document.addEventListener("DOMContentLoaded", loadProfileData);
+    </script>
+</body>
+</html>

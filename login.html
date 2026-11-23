@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Alumni Engagement Platform</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #142b4a 0%, #1a3d68 100%);
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .auth-container {
+            width: 100%;
+            max-width: 440px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .auth-header {
+            background-color: #0d223d;
+            color: white;
+            padding: 28px 25px;
+            text-align: center;
+        }
+
+        .auth-header h1 {
+            font-size: 24px;
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .auth-header p {
+            font-size: 13px;
+            color: #b5c7dc;
+        }
+
+        .auth-tabs {
+            display: flex;
+            border-bottom: 1px solid #e2eaf2;
+            background: #f8fafc;
+        }
+
+        .auth-tabs button {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            background: none;
+            font-size: 14px;
+            font-weight: 600;
+            color: #64748b;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: 0.2s;
+        }
+
+        .auth-tabs button.active {
+            color: #142b4a;
+            border-bottom-color: #194879;
+            background: white;
+        }
+
+        .auth-body {
+            padding: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 11px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 14px;
+            background: #f8fafc;
+            color: #1e293b;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        .form-group input:focus {
+            border-color: #194879;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(25, 72, 121, 0.15);
+        }
+
+        .btn-submit {
+            width: 100%;
+            background: #0b315b;
+            color: white;
+            padding: 13px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 6px;
+        }
+
+        .btn-submit:hover {
+            background: #174d82;
+        }
+
+        .demo-box {
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 12px 14px;
+            margin-top: 20px;
+            font-size: 12px;
+            color: #475569;
+        }
+
+        .demo-box strong {
+            color: #142b4a;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .demo-item {
+            cursor: pointer;
+            color: #194879;
+            text-decoration: underline;
+            margin-right: 8px;
+            display: inline-block;
+            margin-top: 3px;
+        }
+
+        .error-msg {
+            color: #dc2626;
+            font-size: 12px;
+            margin-top: 8px;
+            display: none;
+            text-align: center;
+        }
+
+        .auth-footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #64748b;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="auth-container">
+        <div class="auth-header">
+            <h1>AlumniConnect</h1>
+            <p>Digital Platform for Alumni Data Management & Engagement</p>
+        </div>
+
+        <div class="auth-tabs">
+            <button class="active" id="alumniTabBtn" onclick="switchLoginMode('alumni')">Alumni Login</button>
+            <button id="instituteTabBtn" onclick="switchLoginMode('institute')">Institute Login</button>
+        </div>
+
+        <div class="auth-body">
+            <form id="authForm" onsubmit="handleLoginSubmit(event)">
+                
+                <div class="form-group">
+                    <label id="idLabel">Alumni Registration ID</label>
+                    <input type="text" id="regIdInput" placeholder="e.g. ALU202001" value="ALU202001" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="passwordInput" placeholder="Enter your password" value="password123" required>
+                </div>
+
+                <div class="error-msg" id="loginError">
+                    Registration ID not found in directory. Please verify and try again.
+                </div>
+
+                <button type="submit" class="btn-submit" id="submitBtn">Sign In as Alumni</button>
+
+                <!-- QUICK DEMO SELECTION -->
+                <div class="demo-box">
+                    <strong>Quick Test Credentials (Click to fill):</strong>
+                    <div id="demoCredentialsList">
+                        <span class="demo-item" onclick="fillCreds('ALU202001', 'password123')">ALU202001 (Aman Verma)</span>
+                        <span class="demo-item" onclick="fillCreds('ALU201902', 'password123')">ALU201902 (Priya Nair)</span>
+                        <span class="demo-item" onclick="fillCreds('ALU202200', 'password123')">ALU202200 (Rahul Sharma)</span>
+                    </div>
+                </div>
+
+            </form>
+
+            
+        </div>
+    </div>
+
+    <script src="shared.js"></script>
+    <script>
+        let currentMode = 'alumni';
+
+        function switchLoginMode(mode) {
+            currentMode = mode;
+            const alumniBtn = document.getElementById("alumniTabBtn");
+            const instBtn = document.getElementById("instituteTabBtn");
+            const idLabel = document.getElementById("idLabel");
+            const regIdInput = document.getElementById("regIdInput");
+            const submitBtn = document.getElementById("submitBtn");
+            const demoList = document.getElementById("demoCredentialsList");
+            const errorMsg = document.getElementById("loginError");
+            errorMsg.style.display = "none";
+
+            if (mode === 'alumni') {
+                alumniBtn.classList.add("active");
+                instBtn.classList.remove("active");
+                idLabel.textContent = "Alumni Registration ID";
+                regIdInput.placeholder = "e.g. ALU202001";
+                regIdInput.value = "ALU202001";
+                submitBtn.textContent = "Sign In as Alumni";
+                demoList.innerHTML = `
+                    <span class="demo-item" onclick="fillCreds('ALU202001', 'password123')">ALU202001 (Aman Verma)</span>
+                    <span class="demo-item" onclick="fillCreds('ALU201902', 'password123')">ALU201902 (Priya Nair)</span>
+                    <span class="demo-item" onclick="fillCreds('ALU202200', 'password123')">ALU202200 (Rahul Sharma)</span>
+                `;
+            } else {
+                instBtn.classList.add("active");
+                alumniBtn.classList.remove("active");
+                idLabel.textContent = "Institute / Staff Registration ID";
+                regIdInput.placeholder = "e.g. INST101";
+                regIdInput.value = "INST101";
+                submitBtn.textContent = "Sign In as Institute";
+                demoList.innerHTML = `
+                    <span class="demo-item" onclick="fillCreds('INST101', 'admin123')">INST101 (Alumni Relations Office)</span>
+                `;
+            }
+        }
+
+        function fillCreds(id, pass) {
+            document.getElementById("regIdInput").value = id;
+            document.getElementById("passwordInput").value = pass;
+            document.getElementById("loginError").style.display = "none";
+        }
+
+        function handleLoginSubmit(e) {
+            e.preventDefault();
+            const regId = document.getElementById("regIdInput").value.trim();
+            const password = document.getElementById("passwordInput").value.trim();
+            const errorMsg = document.getElementById("loginError");
+            errorMsg.style.display = "none";
+
+            if (currentMode === 'institute') {
+                // Institute authentication
+                if (regId.toUpperCase() === "INST101" || regId.toLowerCase().includes("inst") || regId.toLowerCase().includes("admin")) {
+                    const instUser = {
+                        name: "Alumni Relations Office",
+                        role: "Institute",
+                        regId: regId.toUpperCase(),
+                        email: "alumni.relations@university.edu",
+                        phone: "+91 1800 102 4433",
+                        batch: "N/A",
+                        branch: "Institutional Administration",
+                        degree: "Admin Office",
+                        company: "University",
+                        designation: "Coordinator",
+                        location: "University Campus",
+                        skills: "Administration, Alumni Outreach, Placement Coordination",
+                        bio: "Centralized Alumni Relations Office dedicated to tracking alumni records, events, and student mentorship.",
+                        avatar: "AO",
+                        isMentor: false
+                    };
+                    localStorage.setItem("currentUser", JSON.stringify(instUser));
+                    window.location.href = "institute_home.html";
+                } else {
+                    errorMsg.textContent = "Invalid Institute ID or password. Use INST101 / admin123.";
+                    errorMsg.style.display = "block";
+                }
+                return;
+            }
+
+            // Alumni authentication - look up registration ID from directory
+            const alumniList = JSON.parse(localStorage.getItem("alumni_list")) || [];
+            const matchedAlumni = alumniList.find(a => 
+                (a.regId && a.regId.toLowerCase() === regId.toLowerCase()) || 
+                (a.email && a.email.toLowerCase() === regId.toLowerCase()) ||
+                (a.id && a.id.toString() === regId)
+            );
+
+            if (matchedAlumni) {
+                const userObj = {
+                    name: matchedAlumni.name,
+                    role: "Alumni",
+                    regId: matchedAlumni.regId || regId.toUpperCase(),
+                    email: matchedAlumni.email,
+                    phone: matchedAlumni.phone,
+                    batch: matchedAlumni.batch,
+                    branch: matchedAlumni.branch,
+                    degree: matchedAlumni.degree || `B.Tech ${matchedAlumni.branch}`,
+                    company: matchedAlumni.company,
+                    designation: matchedAlumni.role,
+                    location: matchedAlumni.location,
+                    skills: Array.isArray(matchedAlumni.skills) ? matchedAlumni.skills.join(", ") : matchedAlumni.skills,
+                    bio: matchedAlumni.bio,
+                    avatar: matchedAlumni.avatar || matchedAlumni.name.substring(0,2).toUpperCase(),
+                    isMentor: matchedAlumni.isMentor
+                };
+
+                localStorage.setItem("currentUser", JSON.stringify(userObj));
+                window.location.href = "alumni_home.html";
+            } else {
+                errorMsg.textContent = "Registration ID not found in Alumni Directory. Please check your Registration ID.";
+                errorMsg.style.display = "block";
+            }
+        }
+    </script>
+</body>
+</html>

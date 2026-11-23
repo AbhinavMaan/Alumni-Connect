@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlumniConnect - Institute Administration Hub</title>
+
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body{
+            display: flex;
+            width: 100%;
+            min-height: 100vh;
+            background: #f4f7fb;
+            color: #202b3c;
+            overflow-x: hidden;
+        }
+
+        .side-bar{
+            background-color: #0b223d;
+            width: 240px;
+            min-width: 240px;
+            max-width: 240px;
+            flex-shrink: 0;
+            min-height: 100vh;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .container1{
+            padding: 25px 20px 15px 20px;
+        }
+
+        .txt1{
+            font-size: 20px;
+            font-weight: bold;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+        }
+
+        .admin-badge-top {
+            display: inline-block;
+            font-size: 10px;
+            background: #f59e0b;
+            color: #78350f;
+            padding: 2px 7px;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-top: 4px;
+        }
+        
+        .container2{
+            padding: 10px 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .container2 a{
+            display: block;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 7px;
+            color: #d5e1ef;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .container2 a:hover, .container2 a.active{
+            background: #194879;
+            color: white;
+        }
+
+        .profile {
+            margin-top: auto;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            margin-left: 15px;
+            margin-right: 15px;
+        }
+
+        .profile-info h4 {
+            font-size: 13px;
+            color: white;
+        }
+
+        .profile-info p {
+            color: #f59e0b;
+            font-size: 11px;
+            font-weight: bold;
+            margin-top: 2px;
+        }
+
+        .main{
+            flex: 1;
+            min-width: 0;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .nav-bar{
+            height: 68px;
+            background: white;
+            border-bottom: 1px solid #e5edf5;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .search-box{
+            width: 55%;
+            max-width: 50vw;
+        }
+
+        .search{
+            width: 100%;
+            padding: 10px 15px;
+            background-color: #f1f6fb;
+            border: 1px solid #e2eaf2;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .search:focus{
+            border-color: #194879;
+            background: white;
+        }
+
+        .top-icons{
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .notification{
+            font-size: 18px;
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 50%;
+            color: #4a5d78;
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #142b4a;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 13px;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+
+        .dashboard{
+            padding: 25px 30px;
+        }
+
+        .welcome h1{
+            margin-bottom: 6px;
+            color: #102944;
+            font-size: 24px;
+        }
+
+        .welcome p{
+            color: #71839a;
+            font-size: 14px;
+        }
+
+        /* Action shortcuts */
+        .admin-action-row {
+            display: flex;
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .btn-quick-admin {
+            background: #0b315b;
+            color: white;
+            border: none;
+            padding: 9px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.2s;
+        }
+
+        .btn-quick-admin:hover {
+            background: #174d82;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-top: 25px;
+        }
+
+        .stat-card {
+            background: white;
+            border: 1px solid #eaf0f6;
+            border-radius: 10px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 3px 12px rgba(20, 50, 80, 0.04);
+        }
+
+        .stat-card p {
+            color: #71839a;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .stat-card h2 {
+            color: #122d4a;
+            font-size: 24px;
+        }
+
+        .stat-icon {
+            width: 44px;
+            height: 44px;
+            background: #eef5fc;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: #194879;
+        }
+
+        /* Analytics Chart Box */
+        .chart-box {
+            background: white;
+            border: 1px solid #eaf0f6;
+            border-radius: 10px;
+            padding: 24px;
+            box-shadow: 0 3px 12px rgba(20, 50, 80, 0.04);
+            margin-top: 25px;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .chart-header h3 {
+            font-size: 16px;
+            color: #122d4a;
+        }
+
+        .chart-tag {
+            font-size: 12px;
+            background: #eaf2fa;
+            color: #194879;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        .bar-chart {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            height: 200px;
+            padding-top: 20px;
+            border-bottom: 2px solid #eef3f8;
+        }
+
+        .bar-column {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            width: 10%;
+        }
+
+        .bar-fill {
+            width: 100%;
+            background: #194879;
+            border-radius: 5px 5px 0 0;
+            transition: height 0.6s ease;
+        }
+
+        .bar-label {
+            font-size: 12px;
+            color: #71839a;
+            margin-top: 8px;
+        }
+
+        .bar-val {
+            font-size: 12px;
+            font-weight: bold;
+            color: #142b4a;
+        }
+
+        /* Events Section */
+        .events{
+            margin-top: 25px;
+        }
+
+        .events-heading{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .events-heading h2 {
+            font-size: 18px;
+            color: #122d4a;
+        }
+
+        .events-heading a{
+            text-decoration: none;
+            color: #194879;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .events-grid-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .event-card{
+            background: white;
+            border: 1px solid #eaf0f6;
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            box-shadow: 0 3px 12px rgba(20, 50, 80, 0.04);
+        }
+
+        .event-image{
+            width: 120px;
+            height: 85px;
+            border-radius: 6px;
+            object-fit: cover;
+        }
+
+        .event-details{
+            flex: 1;
+        }
+
+        .event-details h3{
+            font-size: 16px;
+            color: #122d4a;
+            margin-bottom: 6px;
+        }
+
+        .event-details p{
+            color: #71839a;
+            font-size: 13px;
+            margin-top: 3px;
+        }
+
+        .evt-manage-btn {
+            background: #f1f5f9;
+            color: #142b4a;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            padding: 8px 14px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="side-bar">
+
+        <div>
+            <div class="container1">
+                <span class="txt1">AlumniConnect</span>
+                <div><span class="admin-badge-top">INSTITUTE ADMIN</span></div>
+            </div>
+
+            <div class="container2">
+                <a href="institute_home.html" class="active">Admin Overview</a>
+                <a href="institute_directory.html">Alumni Database</a>
+                <a href="institute_events.html">Manage Events</a>
+                <a href="institute_mentorship.html">Mentorship Oversight</a>
+                <a href="institute_announcements.html">Publish Notices</a>
+                <a href="institute_messages.html">Alumni Chat Hub</a>
+                <a href="institute_profile.html">Office Profile</a>
+                <a href="login.html" onclick="localStorage.removeItem('currentUser')">Sign Out</a>
+            </div>
+        </div>
+
+        <div class="profile" onclick="window.location.href='institute_profile.html'" style="cursor: pointer;">
+            <div class="avatar" id="userAvatar">AO</div>
+            <div class="profile-info">
+                <h4 id="sidebarName">Alumni Relations Office</h4>
+                <p id="sidebarRole">Institute Admin</p>
+            </div>
+        </div>
+
+    </div>
+
+    <main class="main">
+
+        <header class="nav-bar">
+            
+            <div class="search-box">
+                <input type="search" class="search" placeholder="Search alumni records, student pairings, events...">
+            </div>
+
+            <div class="top-icons">
+                <span class="notification" title="Publish Notices" onclick="window.location.href='institute_announcements.html'">📢</span>
+                <span class="notification" title="Messages" onclick="window.location.href='institute_messages.html'">💬</span>
+                <div class="avatar" id="topAvatar" onclick="window.location.href='institute_profile.html'">AO</div>
+            </div>
+
+        </header>
+
+        <section class="dashboard">
+
+            <div class="welcome">
+                <h1>Alumni Relations Administrative Hub</h1>
+                <p>Centralized institution data management, event organization, student mentorship pairing, and official alumni outreach.</p>
+            </div>
+
+            <!-- ADMIN QUICK ACTIONS -->
+            <div class="admin-action-row">
+                <a href="institute_events.html" class="btn-quick-admin">+ Publish New Event</a>
+                <a href="institute_announcements.html" class="btn-quick-admin">+ Post Notice / Circular</a>
+                <a href="institute_directory.html" class="btn-quick-admin">+ Register New Alumnus</a>
+            </div>
+
+            <!-- KEY ADMINISTRATIVE METRICS -->
+            <div class="stats">
+
+                <div class="stat-card">
+                    <div>
+                        <p>Total Alumni Records</p>
+                        <h2 id="totalAlumniRecords">1,249</h2>
+                    </div>
+                    <div class="stat-icon">🎓</div>
+                </div>
+
+                <div class="stat-card">
+                    <div>
+                        <p>Active Student Mentees</p>
+                        <h2 id="totalMenteesCount">184</h2>
+                    </div>
+                    <div class="stat-icon">🤝</div>
+                </div>
+
+                <div class="stat-card">
+                    <div>
+                        <p>Published Campus Events</p>
+                        <h2 id="totalEventsCount">4</h2>
+                    </div>
+                    <div class="stat-icon">📅</div>
+                </div>
+
+                <div class="stat-card">
+                    <div>
+                        <p>Pending Student Applications</p>
+                        <h2 id="totalPendingApplications">3</h2>
+                    </div>
+                    <div class="stat-icon">⏳</div>
+                </div>
+
+            </div>
+
+            <!-- 6-MONTH ENGAGEMENT ANALYTICS -->
+            <div class="chart-box">
+                <div class="chart-header">
+                    <h3>Overall Alumni Engagement Activity (Last 6 Months)</h3>
+                    <span class="chart-tag">Campus RSVPs & Mentorship Participation</span>
+                </div>
+
+                <div class="bar-chart">
+                    <div class="bar-column">
+                        <span class="bar-val">120</span>
+                        <div class="bar-fill" style="height: 60px;"></div>
+                        <span class="bar-label">Jun</span>
+                    </div>
+                    <div class="bar-column">
+                        <span class="bar-val">165</span>
+                        <div class="bar-fill" style="height: 82px;"></div>
+                        <span class="bar-label">Jul</span>
+                    </div>
+                    <div class="bar-column">
+                        <span class="bar-val">210</span>
+                        <div class="bar-fill" style="height: 105px;"></div>
+                        <span class="bar-label">Aug</span>
+                    </div>
+                    <div class="bar-column">
+                        <span class="bar-val">285</span>
+                        <div class="bar-fill" style="height: 140px; background: #2878c7;"></div>
+                        <span class="bar-label">Sep</span>
+                    </div>
+                    <div class="bar-column">
+                        <span class="bar-val">340</span>
+                        <div class="bar-fill" style="height: 165px; background: #194879;"></div>
+                        <span class="bar-label">Oct</span>
+                    </div>
+                    <div class="bar-column">
+                        <span class="bar-val">415</span>
+                        <div class="bar-fill" style="height: 180px; background: #0b315b;"></div>
+                        <span class="bar-label">Nov</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EVENT MANAGEMENT OVERVIEW -->
+            <section class="events">
+                <div class="events-heading">
+                    <h2>Scheduled Events Management</h2>
+                    <a href="institute_events.html">Manage All Events →</a>
+                </div>
+
+                <div class="events-grid-layout" id="instEventsList">
+                    <!-- Populated by JS -->
+                </div>
+            </section>
+
+        </section>
+
+    </main>
+
+    <script src="shared.js"></script>
+    <script>
+        function loadInstituteDashboard() {
+            const alumni = JSON.parse(localStorage.getItem("alumni_list")) || [];
+            const events = JSON.parse(localStorage.getItem("alumni_events")) || [];
+            const mentees = JSON.parse(localStorage.getItem("alumni_mentees")) || [];
+            const requests = JSON.parse(localStorage.getItem("alumni_mentorship")) || [];
+
+            document.getElementById("totalAlumniRecords").textContent = (alumni.length + 1240).toLocaleString();
+            document.getElementById("totalMenteesCount").textContent = (mentees.length + 180).toLocaleString();
+            document.getElementById("totalEventsCount").textContent = events.length;
+            document.getElementById("totalPendingApplications").textContent = requests.filter(r => r.status === 'Pending').length;
+
+            const listEl = document.getElementById("instEventsList");
+            if (listEl) {
+                const upcoming = events.filter(e => e.status === 'upcoming').slice(0, 2);
+                listEl.innerHTML = upcoming.map(evt => `
+                    <div class="event-card">
+                        <img class="event-image" src="${evt.image}" alt="${evt.title}">
+                        <div class="event-details">
+                            <h3>${evt.title}</h3>
+                            <p>📅 ${evt.date} · 📍 ${evt.venue}</p>
+                            <p style="color: #194879; font-weight: bold; margin-top: 4px;">👥 ${evt.rsvps} Registered Attendees</p>
+                        </div>
+                        <a href="institute_events.html" class="evt-manage-btn">Manage</a>
+                    </div>
+                `).join("");
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", loadInstituteDashboard);
+    </script>
+</body>
+</html>

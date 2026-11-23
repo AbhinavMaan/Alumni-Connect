@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlumniConnect - Institute Office Profile & Settings</title>
+
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body{
+            display: flex;
+            width: 100%;
+            min-height: 100vh;
+            background: #f4f7fb;
+            color: #202b3c;
+            overflow-x: hidden;
+        }
+
+        .side-bar{
+            background-color: #142b4a;
+            width: 240px;
+            min-width: 240px;
+            max-width: 240px;
+            flex-shrink: 0;
+            min-height: 100vh;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .container1{
+            padding: 25px 20px 15px 20px;
+        }
+
+        .txt1{
+            font-size: 20px;
+            font-weight: bold;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+        }
+
+        .admin-badge-top {
+            display: inline-block;
+            background: #f59e0b;
+            color: #1e293b;
+            font-size: 10px;
+            font-weight: bold;
+            padding: 3px 8px;
+            border-radius: 4px;
+            margin-top: 6px;
+            letter-spacing: 0.5px;
+        }
+        
+        .container2{
+            padding: 10px 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .container2 a{
+            display: block;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 7px;
+            color: #d5e1ef;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .container2 a:hover, .container2 a.active{
+            background: #194879;
+            color: white;
+        }
+
+        .profile {
+            margin-top: auto;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            margin-left: 15px;
+            margin-right: 15px;
+        }
+
+        .profile-info h4 {
+            font-size: 13px;
+            color: white;
+        }
+
+        .profile-info p {
+            color: #f59e0b;
+            font-size: 11px;
+            font-weight: bold;
+            margin-top: 2px;
+        }
+
+        .main{
+            flex: 1;
+            min-width: 0;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .nav-bar{
+            height: 68px;
+            background: white;
+            border-bottom: 1px solid #e5edf5;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .search-box{
+            width: 55%;
+            max-width: 50vw;
+        }
+
+        .search{
+            width: 100%;
+            padding: 10px 15px;
+            background-color: #f1f6fb;
+            border: 1px solid #e2eaf2;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .search:focus{
+            border-color: #194879;
+            background: white;
+        }
+
+        .top-icons{
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .role-pill-inst {
+            background: #fef3c7;
+            color: #92400e;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            border: 1px solid #fde68a;
+        }
+
+        .bell-icon{
+            font-size: 19px;
+            cursor: pointer;
+            color: #556987;
+        }
+
+        .avatar{
+            width: 38px;
+            height: 38px;
+            background-color: #b45309;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 13px;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+
+        .dashboard{
+            padding: 25px 30px;
+        }
+
+        .breadcrumb {
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 8px;
+        }
+
+        .welcome h1{
+            margin-bottom: 6px;
+            color: #102944;
+            font-size: 24px;
+        }
+
+        .welcome p{
+            color: #71839a;
+            font-size: 14px;
+        }
+
+        /* Profile Layout */
+        .profile-container {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 25px;
+            margin-top: 25px;
+        }
+
+        /* Left Card */
+        .office-card {
+            background: white;
+            border: 1px solid #eaf0f6;
+            border-radius: 10px;
+            padding: 25px 20px;
+            box-shadow: 0 3px 12px rgba(20, 50, 80, 0.04);
+            text-align: center;
+        }
+
+        .office-avatar-lg {
+            width: 80px;
+            height: 80px;
+            background: #0b315b;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: bold;
+            margin: 0 auto 15px auto;
+            box-shadow: 0 4px 10px rgba(11, 49, 91, 0.2);
+        }
+
+        .office-card h2 {
+            font-size: 18px;
+            color: #102944;
+            margin-bottom: 4px;
+        }
+
+        .office-sub {
+            color: #64748b;
+            font-size: 13px;
+            margin-bottom: 12px;
+        }
+
+        .badge-reg {
+            display: inline-block;
+            background: #e2e8f0;
+            color: #334155;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 18px;
+        }
+
+        .office-meta-list {
+            text-align: left;
+            border-top: 1px solid #f1f5f9;
+            padding-top: 15px;
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .meta-label {
+            font-size: 11px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+        .meta-value {
+            font-size: 13px;
+            color: #1e293b;
+            font-weight: 500;
+            margin-top: 2px;
+        }
+
+        /* Stat summary box inside left card */
+        .system-summary-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .system-summary-box h4 {
+            font-size: 13px;
+            color: #1e293b;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            padding: 6px 0;
+            border-bottom: 1px dashed #e2e8f0;
+            color: #475569;
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+        }
+
+        .summary-val {
+            font-weight: bold;
+            color: #0b315b;
+        }
+
+        /* Right Content Box */
+        .settings-content {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .card-box {
+            background: white;
+            border: 1px solid #eaf0f6;
+            border-radius: 10px;
+            padding: 24px;
+            box-shadow: 0 3px 12px rgba(20, 50, 80, 0.04);
+        }
+
+        .card-title {
+            font-size: 16px;
+            color: #122d4a;
+            font-weight: bold;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-desc {
+            font-size: 13px;
+            color: #71839a;
+            margin-bottom: 20px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            font-size: 13px;
+            color: #475569;
+            font-weight: 600;
+        }
+
+        .form-input {
+            padding: 10px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 13px;
+            outline: none;
+            color: #1e293b;
+            background: #ffffff;
+            transition: 0.2s;
+        }
+
+        .form-input:focus {
+            border-color: #194879;
+            box-shadow: 0 0 0 2px rgba(25, 72, 121, 0.1);
+        }
+
+        .form-input[readonly] {
+            background: #f1f5f9;
+            color: #64748b;
+            cursor: not-allowed;
+        }
+
+        textarea.form-input {
+            resize: vertical;
+            min-height: 75px;
+        }
+
+        .btn-primary {
+            background: #0b315b;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-primary:hover {
+            background: #174d82;
+        }
+
+        .btn-secondary {
+            background: #f1f5f9;
+            color: #334155;
+            border: 1px solid #cbd5e1;
+            padding: 10px 18px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-secondary:hover {
+            background: #e2e8f0;
+        }
+
+        .btn-danger {
+            background: #fee2e2;
+            color: #b91c1c;
+            border: 1px solid #fecaca;
+            padding: 10px 18px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-danger:hover {
+            background: #fca5a5;
+            color: #7f1d1d;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 15px;
+            align-items: center;
+        }
+
+        .backup-card {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .backup-text h4 {
+            font-size: 14px;
+            color: #1e3a8a;
+            margin-bottom: 4px;
+        }
+
+        .backup-text p {
+            font-size: 12px;
+            color: #3b82f6;
+        }
+
+        /* Toast notifications */
+        .toast {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: #10b981;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 6px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+            font-size: 13px;
+            font-weight: bold;
+            display: none;
+            z-index: 1000;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="side-bar">
+
+        <div>
+            <div class="container1">
+                <span class="txt1">AlumniConnect</span>
+                <div><span class="admin-badge-top">INSTITUTE ADMIN</span></div>
+            </div>
+
+            <div class="container2">
+                <a href="institute_home.html">Admin Overview</a>
+                <a href="institute_directory.html">Alumni Database</a>
+                <a href="institute_events.html">Manage Events</a>
+                <a href="institute_mentorship.html">Mentorship Oversight</a>
+                <a href="institute_announcements.html">Publish Notices</a>
+                <a href="institute_messages.html">Alumni Chat Hub</a>
+                <a href="institute_profile.html" class="active">Office Profile</a>
+                <a href="login.html" onclick="localStorage.removeItem('currentUser')">Sign Out</a>
+            </div>
+        </div>
+
+        <div class="profile" onclick="window.location.href='institute_profile.html'" style="cursor: pointer;">
+            <div class="avatar" id="userAvatar">AO</div>
+            <div class="profile-info">
+                <h4 id="sidebarName">Alumni Relations Office</h4>
+                <p id="sidebarRole">Institute Admin</p>
+            </div>
+        </div>
+
+    </div>
+
+    <main class="main">
+
+        <header class="nav-bar">
+            
+            <div class="search-box">
+                <input type="search" class="search" placeholder="Search alumni records, student pairings, events...">
+            </div>
+
+            <div class="top-icons">
+                <span class="role-pill-inst">🏛️ Institute Admin</span>
+                <span class="bell-icon" title="Notifications">🔔</span>
+                <div class="avatar" id="topAvatar">AO</div>
+            </div>
+
+        </header>
+
+        <section class="dashboard">
+
+            <div class="breadcrumb">Institution Management &gt; Office Profile & Administration</div>
+
+            <div class="welcome">
+                <h1>Alumni Relations Office Profile & Settings</h1>
+                <p>Manage official university contact records, system data backups, and administrative credentials.</p>
+            </div>
+
+            <div class="profile-container">
+
+                <!-- Left Column: Official Institute Card -->
+                <div>
+                    <div class="office-card">
+                        <div class="office-avatar-lg">🏛️</div>
+                        <h2 id="cardOfficeTitle">Alumni Relations Office</h2>
+                        <p class="office-sub" id="cardInstituteName">Apex Institute of Technology</p>
+                        <span class="badge-reg" id="cardRegBadge">🆔 INST101 (Institutional Admin)</span>
+
+                        <div class="office-meta-list">
+                            <div class="meta-item">
+                                <span class="meta-label">Officer In-Charge</span>
+                                <span class="meta-value" id="cardOfficerName">Dr. Arvind R. Kulkarni</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Official Email</span>
+                                <span class="meta-value" id="cardOfficialEmail">alumni.relations@university.edu</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Helpline Phone</span>
+                                <span class="meta-value" id="cardPhone">+91 (011) 2766-8800</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Campus Location</span>
+                                <span class="meta-value" id="cardLocation">Admin Block, 2nd Floor, Room 204</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Operating Hours</span>
+                                <span class="meta-value">Mon - Fri, 9:00 AM - 5:00 PM</span>
+                            </div>
+                        </div>
+
+                        <!-- System stats summary -->
+                        <div class="system-summary-box">
+                            <h4>Database Metrics</h4>
+                            <div class="summary-row">
+                                <span>Alumni in Directory:</span>
+                                <span class="summary-val" id="statAlumniCount">0</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>Active Events:</span>
+                                <span class="summary-val" id="statEventsCount">0</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>Published Circulars:</span>
+                                <span class="summary-val" id="statNoticesCount">0</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>Mentorship Requests:</span>
+                                <span class="summary-val" id="statMenteesCount">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Settings & Data Controls -->
+                <div class="settings-content">
+
+                    <!-- 1. Office Contact Form -->
+                    <div class="card-box">
+                        <h3 class="card-title">🏢 Institutional Office Information</h3>
+                        <p class="card-desc">Keep university contact records updated so alumni and students can reach out to the right office desk.</p>
+
+                        <form id="officeInfoForm" onsubmit="handleSaveOfficeInfo(event)">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label>Office Name / Unit Title</label>
+                                    <input type="text" id="officeTitleInput" class="form-input" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Affiliated University / Institute</label>
+                                    <input type="text" id="instituteNameInput" class="form-input" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Officer in Charge / Dean Name</label>
+                                    <input type="text" id="officerNameInput" class="form-input" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Office Registration ID (Admin Code)</label>
+                                    <input type="text" id="regIdInput" class="form-input" readonly value="INST101">
+                                </div>
+                                <div class="form-group">
+                                    <label>Official Helpline Email</label>
+                                    <input type="email" id="emailInput" class="form-input" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Helpline Telephone Number</label>
+                                    <input type="text" id="phoneInput" class="form-input" required>
+                                </div>
+                                <div class="form-group full-width">
+                                    <label>Office Room / Building Location</label>
+                                    <input type="text" id="locationInput" class="form-input" required>
+                                </div>
+                                <div class="form-group full-width">
+                                    <label>Public Welcome Note & Instructions for Alumni</label>
+                                    <textarea id="bioInput" class="form-input" rows="3"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="btn-group">
+                                <button type="submit" class="btn-primary">💾 Save Office Details</button>
+                                <button type="button" class="btn-secondary" onclick="loadOfficeData()">Discard Changes</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- 2. Centralized Database Operations -->
+                    <div class="card-box">
+                        <h3 class="card-title">💾 Centralized Database Operations</h3>
+                        <p class="card-desc">Export centralized records for audits (NAAC, NBA, NIRF) or restore demo database tables.</p>
+
+                        <div class="backup-card">
+                            <div class="backup-text">
+                                <h4>Full Database Backup (JSON Format)</h4>
+                                <p>Download all alumni profiles, RSVPs, mentorship pairs, circulars, and messages in a single file.</p>
+                            </div>
+                            <button class="btn-primary" onclick="exportDatabaseJSON()">📥 Export JSON</button>
+                        </div>
+
+                        <div style="border-top: 1px solid #f1f5f9; padding-top: 15px; margin-top: 15px;">
+                            <h4 style="font-size: 14px; color: #b91c1c; margin-bottom: 5px;">⚠️ Reset System Database</h4>
+                            <p style="font-size: 12px; color: #64748b; margin-bottom: 12px;">Reset all local directory entries, events, and notices back to course seed values.</p>
+                            <button class="btn-danger" onclick="confirmResetDatabase()">🔄 Reset Seed Records</button>
+                        </div>
+                    </div>
+
+                    <!-- 3. Security & Credentials -->
+                    <div class="card-box">
+                        <h3 class="card-title">🔐 Administrative Credentials</h3>
+                        <p class="card-desc">Update the password for the institutional administrator account (INST101).</p>
+
+                        <form id="passwordForm" onsubmit="handlePasswordUpdate(event)">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label>Current Password</label>
+                                    <input type="password" id="currentPassInput" class="form-input" required placeholder="••••••••">
+                                </div>
+                                <div class="form-group">
+                                    <label>New Password</label>
+                                    <input type="password" id="newPassInput" class="form-input" required placeholder="Minimum 6 characters">
+                                </div>
+                                <div class="form-group full-width">
+                                    <label>Confirm New Password</label>
+                                    <input type="password" id="confirmPassInput" class="form-input" required placeholder="Re-enter new password">
+                                </div>
+                            </div>
+
+                            <div class="btn-group">
+                                <button type="submit" class="btn-primary">🔑 Update Password</button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">Profile updated successfully!</div>
+
+    <script src="shared.js"></script>
+    <script>
+        // Restrict page to Institute role
+        if (!isInstituteUser()) {
+            window.location.href = "alumni_home.html";
+        }
+
+        const defaultOfficeProfile = {
+            officeTitle: "Alumni Relations Office",
+            instituteName: "Apex Institute of Technology",
+            officerName: "Dr. Arvind R. Kulkarni",
+            regId: "INST101",
+            email: "alumni.relations@university.edu",
+            phone: "+91 (011) 2766-8800",
+            location: "Administration Block, 2nd Floor, Room 204",
+            bio: "Centralized Alumni Relations Office dedicated to tracking alumni records, events, and student mentorship."
+        };
+
+        function getOfficeData() {
+            try {
+                const stored = localStorage.getItem("institute_profile");
+                if (stored) return JSON.parse(stored);
+            } catch(e) {}
+            return defaultOfficeProfile;
+        }
+
+        function loadOfficeData() {
+            const data = getOfficeData();
+            
+            // Populate form
+            document.getElementById("officeTitleInput").value = data.officeTitle || defaultOfficeProfile.officeTitle;
+            document.getElementById("instituteNameInput").value = data.instituteName || defaultOfficeProfile.instituteName;
+            document.getElementById("officerNameInput").value = data.officerName || defaultOfficeProfile.officerName;
+            document.getElementById("regIdInput").value = data.regId || "INST101";
+            document.getElementById("emailInput").value = data.email || defaultOfficeProfile.email;
+            document.getElementById("phoneInput").value = data.phone || defaultOfficeProfile.phone;
+            document.getElementById("locationInput").value = data.location || defaultOfficeProfile.location;
+            document.getElementById("bioInput").value = data.bio || defaultOfficeProfile.bio;
+
+            // Populate preview card
+            document.getElementById("cardOfficeTitle").textContent = data.officeTitle || defaultOfficeProfile.officeTitle;
+            document.getElementById("cardInstituteName").textContent = data.instituteName || defaultOfficeProfile.instituteName;
+            document.getElementById("cardRegBadge").textContent = `🆔 ${data.regId || "INST101"} (Institutional Admin)`;
+            document.getElementById("cardOfficerName").textContent = data.officerName || defaultOfficeProfile.officerName;
+            document.getElementById("cardOfficialEmail").textContent = data.email || defaultOfficeProfile.email;
+            document.getElementById("cardPhone").textContent = data.phone || defaultOfficeProfile.phone;
+            document.getElementById("cardLocation").textContent = data.location || defaultOfficeProfile.location;
+
+            // Update database metrics
+            const alumni = JSON.parse(localStorage.getItem("alumni_list")) || [];
+            const events = JSON.parse(localStorage.getItem("alumni_events")) || [];
+            const notices = JSON.parse(localStorage.getItem("alumni_announcements")) || [];
+            const mentees = JSON.parse(localStorage.getItem("alumni_mentorship")) || [];
+
+            document.getElementById("statAlumniCount").textContent = alumni.length;
+            document.getElementById("statEventsCount").textContent = events.length;
+            document.getElementById("statNoticesCount").textContent = notices.length;
+            document.getElementById("statMenteesCount").textContent = mentees.length;
+        }
+
+        function showToast(msg, isError = false) {
+            const toast = document.getElementById("toast");
+            toast.textContent = msg;
+            toast.style.background = isError ? "#ef4444" : "#10b981";
+            toast.style.display = "block";
+            setTimeout(() => {
+                toast.style.display = "none";
+            }, 3000);
+        }
+
+        function handleSaveOfficeInfo(e) {
+            e.preventDefault();
+            const updated = {
+                officeTitle: document.getElementById("officeTitleInput").value.trim(),
+                instituteName: document.getElementById("instituteNameInput").value.trim(),
+                officerName: document.getElementById("officerNameInput").value.trim(),
+                regId: "INST101",
+                email: document.getElementById("emailInput").value.trim(),
+                phone: document.getElementById("phoneInput").value.trim(),
+                location: document.getElementById("locationInput").value.trim(),
+                bio: document.getElementById("bioInput").value.trim()
+            };
+
+            localStorage.setItem("institute_profile", JSON.stringify(updated));
+
+            // Also update currentUser in localStorage so headers and sidebars reflect updates
+            const currentUser = getCurrentUser();
+            if (currentUser && currentUser.role === "Institute") {
+                currentUser.name = updated.officeTitle;
+                currentUser.email = updated.email;
+                currentUser.phone = updated.phone;
+                currentUser.location = updated.location;
+                currentUser.bio = updated.bio;
+                localStorage.setItem("currentUser", JSON.stringify(currentUser));
+                updateSidebarUser();
+            }
+
+            loadOfficeData();
+            showToast("Office details saved successfully!");
+        }
+
+        function handlePasswordUpdate(e) {
+            e.preventDefault();
+            const currentPass = document.getElementById("currentPassInput").value;
+            const newPass = document.getElementById("newPassInput").value;
+            const confirmPass = document.getElementById("confirmPassInput").value;
+
+            // Simple verification against current admin pass
+            const storedPass = localStorage.getItem("institute_password") || "admin123";
+
+            if (currentPass !== storedPass) {
+                showToast("Current password does not match (Default is admin123)", true);
+                return;
+            }
+
+            if (newPass.length < 6) {
+                showToast("New password must be at least 6 characters long", true);
+                return;
+            }
+
+            if (newPass !== confirmPass) {
+                showToast("New passwords do not match", true);
+                return;
+            }
+
+            localStorage.setItem("institute_password", newPass);
+            document.getElementById("passwordForm").reset();
+            showToast("Admin password updated successfully!");
+        }
+
+        function exportDatabaseJSON() {
+            const exportData = {
+                exportedAt: new Date().toISOString(),
+                exportedBy: "INST101 (Alumni Relations Office)",
+                alumni: JSON.parse(localStorage.getItem("alumni_list")) || [],
+                events: JSON.parse(localStorage.getItem("alumni_events")) || [],
+                announcements: JSON.parse(localStorage.getItem("alumni_announcements")) || [],
+                mentorship_requests: JSON.parse(localStorage.getItem("alumni_mentorship")) || [],
+                mentees: JSON.parse(localStorage.getItem("alumni_mentees")) || [],
+                messages: JSON.parse(localStorage.getItem("alumni_messages")) || []
+            };
+
+            const jsonStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportData, null, 2));
+            const dlAnchor = document.createElement("a");
+            dlAnchor.setAttribute("href", jsonStr);
+            dlAnchor.setAttribute("download", `AlumniConnect_Backup_${new Date().toISOString().slice(0,10)}.json`);
+            document.body.appendChild(dlAnchor);
+            dlAnchor.click();
+            dlAnchor.remove();
+
+            showToast("Database backup downloaded successfully!");
+        }
+
+        function confirmResetDatabase() {
+            if (confirm("Are you sure you want to restore original default alumni, events, and notices? Any custom test entries will be reset.")) {
+                localStorage.removeItem("alumni_list");
+                localStorage.removeItem("alumni_events");
+                localStorage.removeItem("alumni_announcements");
+                localStorage.removeItem("alumni_mentorship");
+                localStorage.removeItem("alumni_mentees");
+                localStorage.removeItem("alumni_messages");
+                localStorage.removeItem("institute_profile");
+                initData();
+                loadOfficeData();
+                showToast("Database restored to seed records!");
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            loadOfficeData();
+        });
+    </script>
+</body>
+</html>
